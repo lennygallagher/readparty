@@ -23,6 +23,10 @@ public class Person {
     @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     private LocalDateTime birthdate;
 
+    public Person(String id){
+        this.id = id;
+    }
+
     public JsonObject toJson(){
         return Json.createObjectBuilder()
                 .add("id", id)

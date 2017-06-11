@@ -1,10 +1,10 @@
 package ch.adesso.partyservice.kafka;
 
+import ch.adesso.partyservice.party.entity.CoreEvent;
 import com.airhacks.porcupine.execution.boundary.Dedicated;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.clients.producer.KafkaProducer;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.ConcurrencyManagement;
@@ -35,7 +35,7 @@ public class KafkaHandler {
     ExecutorService kafka;
 
     @Inject
-    Event<String> eventChannel;
+    Event<CoreEvent> eventChannel;
 
     @PostConstruct
     public void onInit() {
@@ -64,7 +64,8 @@ public class KafkaHandler {
         try {
             String eventText = record.value();
             System.out.println("eventText = " + eventText);
-            eventChannel.fire(eventText);
+            CoreEvent coreEvent = new CoreEvent(record.value());
+            eventChannel.fire(coreEvent);
 
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());

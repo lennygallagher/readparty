@@ -18,7 +18,7 @@ import java.util.UUID;
 public class KafkaProvider {
 
     public static final String TOPIC = "person";
-    public static final String KAFKA_ADDRESS = "localhost:29092,localhost:39092,localhost:49092";
+    public static final String KAFKA_ADDRESS = "kafka-1:29092,kafka-2:39092,kafka-3:49092";
     public static final String GROUP_ID = "party-gr";
 
     //public static final String GROUP_ID = "toDefine";

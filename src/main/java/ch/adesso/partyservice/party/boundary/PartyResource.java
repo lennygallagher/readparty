@@ -20,11 +20,14 @@ import java.util.Set;
 public class PartyResource {
 
     @Inject
-    InMemoryStore inMemoryStore;
+    private InMemoryStore inMemoryStore;
 
     @GET
     public Collection<Person> getAll(){
-       return inMemoryStore.personMap.values();
+        System.out.println("inMemoryStore = " + inMemoryStore);
+
+        System.out.println("getAll: " + InMemoryStore.getPersonMap().size());
+       return InMemoryStore.getPersonMap().values();
     }
 
 }

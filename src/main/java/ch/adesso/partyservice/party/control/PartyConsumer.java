@@ -21,7 +21,10 @@ public class PartyConsumer {
     private InMemoryStore inMemoryStore;
 
     public void handlePersonCreated(@Observes PersonCreatedEvent event){
-        inMemoryStore.personMap.put(event.getId(), new Person(event.getId()));
+        System.out.println("inMemoryStore = " + InMemoryStore.getPersonMap());
+        System.out.println("Event(handlePersonCreated): " + event.toString());
+        InMemoryStore.getPersonMap().put(event.getId(), new Person(event.getId()));
+        System.out.println("inMemoryStore = " + inMemoryStore.getPersonMap().size());
     }
 }
 

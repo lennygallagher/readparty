@@ -1,6 +1,7 @@
 package ch.adesso.partyservice.kafka;
 
 import ch.adesso.partyservice.party.entity.CoreEvent;
+import ch.adesso.partyservice.party.entity.PersonCreatedEvent;
 import com.airhacks.porcupine.execution.boundary.Dedicated;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -45,7 +46,7 @@ public class KafkaHandler {
 
     public void handleKafkaEvent() {
         while (true) {
-            ConsumerRecords<String, String> records = consumer.poll(200);
+            ConsumerRecords<String, String> records = consumer.poll(500);
             for (ConsumerRecord<String, String> record : records) {
                 System.out.println("Record value: " + record.value());
                 switch (record.topic()) {
@@ -64,13 +65,18 @@ public class KafkaHandler {
         try {
             String eventText = record.value();
             System.out.println("eventText = " + eventText);
-            CoreEvent coreEvent = new CoreEvent(record.value());
-            eventChannel.fire(coreEvent);
+            CoreEvent event = new CoreEvent(record.value());
+            if(PersonCreatedEvent.NAME.equals(event.getName())){
+                event = new PersonCreatedEvent(event);
+            }
+
+            eventChannel.fire(event);
 
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
     }
+
 
 }

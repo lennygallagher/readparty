@@ -17,9 +17,11 @@ import java.util.UUID;
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 public class KafkaProvider {
 
-    public static final String TOPIC = "toDefine";
+    public static final String TOPIC = "person";
     public static final String KAFKA_ADDRESS = "localhost:29092,localhost:39092,localhost:49092";
-    public static final String GROUP_ID = "toDefine";
+    public static final String GROUP_ID = "party-gr";
+
+    //public static final String GROUP_ID = "toDefine";
 
     private KafkaConsumer<String, String> consumer;
 

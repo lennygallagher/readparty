@@ -1,12 +1,17 @@
 package ch.adesso.partyservice.party.boundary;
 
+import ch.adesso.partyservice.InMemoryStore;
 import ch.adesso.partyservice.party.entity.Person;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Path("parties")
 @Produces(MediaType.APPLICATION_JSON)
@@ -14,9 +19,12 @@ import java.util.Map;
 @Stateless
 public class PartyResource {
 
+    @Inject
+    InMemoryStore inMemoryStore;
+
     @GET
-    public Person getAll(){
-       return new Person("1","Maria", "Aranda", "Active", LocalDateTime.parse("1981-12-15T00:00:00"));
+    public Collection<Person> getAll(){
+       return inMemoryStore.personMap.values();
     }
 
 }

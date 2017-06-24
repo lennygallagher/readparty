@@ -1,7 +1,7 @@
 package ch.adesso.partyservice.kafka;
 
 import ch.adesso.partyservice.party.entity.CoreEvent;
-import ch.adesso.partyservice.party.entity.PersonCreatedEvent;
+import ch.adesso.partyservice.party.entity.EventEnvelope;
 import com.airhacks.porcupine.execution.boundary.Dedicated;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -29,7 +29,7 @@ public class KafkaHandler {
     public static final String DATE_FORMAT = "YYYYMMDDhhmm";
 
     @Inject
-    KafkaConsumer<String, String> consumer;
+    KafkaConsumer<String, EventEnvelope> consumer;
 
     @Dedicated
     @Inject
@@ -40,14 +40,14 @@ public class KafkaHandler {
 
     @PostConstruct
     public void onInit() {
-        runAsync(this::handleKafkaEvent, kafka);
+       runAsync(this::handleKafkaEvent, kafka);
     }
 
 
     public void handleKafkaEvent() {
         while (true) {
-            ConsumerRecords<String, String> records = consumer.poll(500);
-            for (ConsumerRecord<String, String> record : records) {
+            ConsumerRecords<String, EventEnvelope> records = consumer.poll(500);
+            for (ConsumerRecord<String, EventEnvelope> record : records) {
                 System.out.println("Record value: " + record.value());
                 switch (record.topic()) {
                     case KafkaProvider.TOPIC:
@@ -61,17 +61,13 @@ public class KafkaHandler {
         }
     }
 
-    private void handleEvents(ConsumerRecord<String, String> record) {
+    private void handleEvents(ConsumerRecord<String, EventEnvelope> record) {
         try {
-            String eventText = record.value();
-            System.out.println("eventText = " + eventText);
-            CoreEvent event = new CoreEvent(record.value());
-            if(PersonCreatedEvent.NAME.equals(event.getName())){
-                event = new PersonCreatedEvent(event);
-            }
-
+            EventEnvelope envelope =  record.value();
+            CoreEvent event = envelope.getEvent();
+            event.setVersion(record.offset());
+            System.out.println("eventText = " + event.toString());
             eventChannel.fire(event);
-
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
             e.printStackTrace();

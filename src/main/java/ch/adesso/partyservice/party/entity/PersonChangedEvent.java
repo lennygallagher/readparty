@@ -5,21 +5,20 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * Created by hackathon on 11.06.17.
+ * Created by tom on 23.06.17.
  */
 @Data
 @ToString
 @NoArgsConstructor
-public class PersonCreatedEvent extends PartyEvent {
+public class PersonChangedEvent extends PartyEvent  {
 
     private String partyId;
     private String firstname;
     private String lastname;
-    public PersonCreatedEvent(String partyId, String firstname, String lastname) {
+    public PersonChangedEvent(String partyId, String firstname, String lastname) {
         super(PersonCreatedEvent.class);
         this.partyId = partyId;
         this.firstname = firstname;
         this.lastname = lastname;
     }
-
 }

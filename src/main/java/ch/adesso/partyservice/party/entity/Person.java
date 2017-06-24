@@ -19,6 +19,7 @@ public class Person {
     private String firstname;
     private String lastname;
     private String status;
+    private long version;
 
     @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     private LocalDateTime birthdate;
@@ -26,15 +27,4 @@ public class Person {
     public Person(String id){
         this.id = id;
     }
-
-    public JsonObject toJson(){
-        return Json.createObjectBuilder()
-                .add("id", id)
-                .add("firstname", firstname)
-                .add("lastname", lastname)
-                .add("status", status)
-                .add("birthdate", birthdate.toString())
-                .build();
-    }
-
 }

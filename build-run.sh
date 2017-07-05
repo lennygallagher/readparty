@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+cd $(dirname $0)
+
 mvn clean install
 docker build -t maria/readparty:${1} .
 docker stop readparty
